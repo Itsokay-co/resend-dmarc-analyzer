@@ -206,13 +206,13 @@ export default function Home() {
                   View on GitHub
                 </a>
               </div>
-              {/* Email preview placeholder - positioned within the section */}
-              <div
-                className="hidden md:flex absolute -bottom-12 -right-8 w-64 lg:w-72 aspect-[3/4] bg-gray-2 border border-gray-3 rounded-lg shadow-2xl items-center justify-center"
+              {/* Email preview - positioned within the section */}
+              <img
+                src="/dmarc-analyzer-email-preview.png"
+                alt="DMARC report email preview"
+                className="hidden md:block absolute -bottom-20 right-4 w-52 lg:w-56 rounded-lg shadow-2xl"
                 style={{ transform: 'rotate(12deg)' }}
-              >
-                <span className="text-xs text-gray-5">Email preview</span>
-              </div>
+              />
             </div>
           </div>
         ) : (
