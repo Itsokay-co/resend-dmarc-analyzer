@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { ReportViewer } from '@/components/dmarc';
 import { parseAndAnalyze } from '@/lib/dmarc/parser';
 import type { DMARCAnalysis } from '@/types/dmarc';
+import { useState } from 'react';
 
 export default function Home() {
   const [xml, setXml] = useState('');
@@ -156,7 +156,7 @@ export default function Home() {
             {/* Back button */}
             <button
               onClick={handleClear}
-              className="flex items-center gap-2 text-sm text-gray-6 hover:text-gray-9 transition-colors"
+              className="flex items-center gap-2 text-sm text-gray-6 hover:text-gray-9 transition-colors cursor-pointer"
             >
               <svg
                 width="16"
@@ -181,24 +181,32 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-gray-3 mt-16">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between text-sm text-gray-6">
+        <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm text-gray-6">
           <p>DMARC Analyzer</p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <a
-              href="https://resend.com/docs"
+              href="https://resend.com/blog/how-to-read-a-dmarc-report"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-gray-9 transition-colors"
             >
-              Docs
+              How to read a DMARC report
             </a>
             <a
-              href="https://github.com/resend"
+              href="https://resend.com/blog/dmarc-policy-modes"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-gray-9 transition-colors"
             >
-              GitHub
+              DMARC policy modes
+            </a>
+            <a
+              href="https://resend.com/blog/how-dmarc-applies-to-subdomains"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gray-9 transition-colors"
+            >
+              DMARC and subdomains
             </a>
           </div>
         </div>

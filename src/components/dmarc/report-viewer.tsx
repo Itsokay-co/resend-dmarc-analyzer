@@ -101,7 +101,11 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
         <SummaryCard
           title="Pass Rate"
           value={`${passRate}%`}
-          subtitle={`${summary.passedBoth.toLocaleString()} passed both`}
+          subtitle={
+            Number(passRate) < 10
+              ? `Only ${summary.passedBoth.toLocaleString()} passed both`
+              : `${summary.passedBoth.toLocaleString()} passed both`
+          }
           variant={
             Number(passRate) >= 95
               ? 'success'
@@ -112,15 +116,17 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
         />
         <SummaryCard
           title="DKIM"
-          value={`${summary.passedDKIM.toLocaleString()}`}
+          value={`${summary.passedDKIM.toLocaleString()} passes`}
           subtitle={`${summary.failedDKIM.toLocaleString()} failed`}
-          variant={summary.failedDKIM === 0 ? 'success' : 'danger'}
+          variant={summary.failedDKIM === 0 ? 'success' : 'default'}
+          subtitleVariant={summary.failedDKIM > 0 ? 'danger' : 'default'}
         />
         <SummaryCard
           title="SPF"
-          value={`${summary.passedSPF.toLocaleString()}`}
+          value={`${summary.passedSPF.toLocaleString()} passes`}
           subtitle={`${summary.failedSPF.toLocaleString()} failed`}
-          variant={summary.failedSPF === 0 ? 'success' : 'danger'}
+          variant={summary.failedSPF === 0 ? 'success' : 'default'}
+          subtitleVariant={summary.failedSPF > 0 ? 'danger' : 'default'}
         />
       </div>
 
