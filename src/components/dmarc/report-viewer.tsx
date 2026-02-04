@@ -34,14 +34,19 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
               {report.report_metadata.org_name}
             </h2>
             <p className="text-sm text-gray-6 mt-1">
-              Report ID: {report.report_metadata.report_id}
+              Report ID:{' '}
+              <span className="font-mono">
+                {report.report_metadata.report_id}
+              </span>
             </p>
           </div>
           <div className="text-sm text-gray-6">
             <p>
               {formatDate(dateRange.start)} — {formatDate(dateRange.end)}
             </p>
-            <p className="text-xs mt-1">{report.report_metadata.email}</p>
+            <p className="text-xs mt-1 font-mono">
+              {report.report_metadata.email}
+            </p>
           </div>
         </div>
       </div>
@@ -54,7 +59,7 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           <div>
             <p className="text-xs text-gray-5">Domain</p>
-            <p className="font-medium text-gray-9">
+            <p className="font-medium font-mono text-gray-9">
               {report.policy_published.domain}
             </p>
           </div>

@@ -157,7 +157,7 @@ export function RecordsTable({ records }: RecordsTableProps) {
                 <td className="px-4 py-3 text-right text-gray-9">
                   {record.row.count.toLocaleString()}
                 </td>
-                <td className="px-4 py-3 text-gray-7">
+                <td className="px-4 py-3 text-gray-7 font-mono">
                   {record.identifiers.header_from}
                 </td>
                 <td className="px-4 py-3 text-center">
