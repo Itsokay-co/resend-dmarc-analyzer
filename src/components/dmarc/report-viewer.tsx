@@ -49,7 +49,7 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
       {/* Policy Info */}
       <div className="border border-gray-3 rounded-xl p-6">
         <h3 className="text-sm font-medium text-gray-6 mb-4">
-          Published Policy
+          Published policy
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           <div>
@@ -94,12 +94,12 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <SummaryCard
-          title="Total Messages"
+          title="Total messages"
           value={summary.totalMessages.toLocaleString()}
           subtitle={`${report.record.length} source${report.record.length !== 1 ? 's' : ''}`}
         />
         <SummaryCard
-          title="Pass Rate"
+          title="Pass rate"
           value={`${passRate}%`}
           subtitle={
             Number(passRate) < 10
@@ -134,7 +134,7 @@ export function ReportViewer({ analysis }: ReportViewerProps) {
       {(summary.dispositionQuarantine > 0 || summary.dispositionReject > 0) && (
         <div className="border border-gray-3 rounded-xl p-6">
           <h3 className="text-sm font-medium text-gray-6 mb-4">
-            Disposition Breakdown
+            Disposition breakdown
           </h3>
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -233,7 +233,7 @@ function AuthResultsDetail({
       {dkimByDomain.size > 0 && (
         <div className="border border-gray-3 rounded-xl p-6">
           <h3 className="text-sm font-medium text-gray-6 mb-4">
-            DKIM Results by Domain
+            DKIM results by domain
           </h3>
           <div className="space-y-3">
             {Array.from(dkimByDomain.entries()).map(([domain, stats]) => (
@@ -257,7 +257,7 @@ function AuthResultsDetail({
       {spfByDomain.size > 0 && (
         <div className="border border-gray-3 rounded-xl p-6">
           <h3 className="text-sm font-medium text-gray-6 mb-4">
-            SPF Results by Domain
+            SPF results by domain
           </h3>
           <div className="space-y-3">
             {Array.from(spfByDomain.entries()).map(([domain, stats]) => (

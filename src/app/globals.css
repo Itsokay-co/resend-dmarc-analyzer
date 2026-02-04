@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
 :root {
+  /* Core colors - Resend brand */
   --background: #000000;
-  --foreground: #ededed;
+  --foreground: #fdfdfd;
 
-  /* Grays - Resend style */
+  /* Gray scale - Resend brand */
+  --gray-bg: #16171aeb;
+  --gray-fg: #fdfeffa6;
   --gray-1: #0a0a0a;
   --gray-2: #141414;
   --gray-3: #1f1f1f;
@@ -14,17 +17,17 @@
   --gray-7: #8f8f8f;
   --gray-8: #b4b4b4;
   --gray-9: #d4d4d4;
-  --gray-10: #ededed;
+  --gray-10: #fdfdfd;
 
-  /* Status colors */
-  --green: #22c55e;
-  --green-dim: rgba(34, 197, 94, 0.15);
-  --red: #ef4444;
-  --red-dim: rgba(239, 68, 68, 0.15);
-  --yellow: #eab308;
-  --yellow-dim: rgba(234, 179, 8, 0.15);
-  --blue: #3b82f6;
-  --blue-dim: rgba(59, 130, 246, 0.15);
+  /* Semantic colors - Resend brand */
+  --green: #46fea5d4;
+  --green-dim: #22ff991e;
+  --red: #ff9592;
+  --red-dim: #ff173f2d;
+  --yellow: #ffca16;
+  --yellow-dim: #fa820022;
+  --blue: #70b8ff;
+  --blue-dim: #0077ff3a;
 }
 
 @theme inline {
@@ -48,8 +51,8 @@
   --color-yellow-dim: var(--yellow-dim);
   --color-blue: var(--blue);
   --color-blue-dim: var(--blue-dim);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-commit-mono), ui-monospace, monospace;
 }
 
 body {

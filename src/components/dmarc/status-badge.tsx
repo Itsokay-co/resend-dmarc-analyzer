@@ -28,9 +28,9 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
     temperror: {
       bg: 'bg-yellow-dim',
       text: 'text-yellow',
-      label: 'Temp Error',
+      label: 'Temp error',
     },
-    permerror: { bg: 'bg-red-dim', text: 'text-red', label: 'Perm Error' },
+    permerror: { bg: 'bg-red-dim', text: 'text-red', label: 'Perm error' },
     policy: { bg: 'bg-blue-dim', text: 'text-blue', label: 'Policy' },
   };
 

@@ -82,7 +82,7 @@ export default function Home() {
             {/* Hero */}
             <div className="text-center py-8">
               <h2 className="text-3xl font-semibold text-gray-10 mb-3">
-                Analyze DMARC Reports
+                Analyze DMARC reports
               </h2>
               <p className="text-gray-6 max-w-lg mx-auto">
                 Paste your DMARC aggregate report (RUA) XML below to get a
@@ -133,7 +133,7 @@ export default function Home() {
                 disabled={isLoading || !xml.trim()}
                 className="w-full bg-gray-10 text-gray-1 font-medium py-3 px-6 rounded-xl hover:bg-gray-9 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isLoading ? 'Analyzing...' : 'Analyze Report'}
+                {isLoading ? 'Analyzing...' : 'Analyze report'}
               </button>
             </div>
 
