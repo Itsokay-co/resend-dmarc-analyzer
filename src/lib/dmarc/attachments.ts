@@ -101,7 +101,7 @@ async function detectAndExtract(buffer: Buffer): Promise<string> {
  * Process multiple attachments and return all extracted XML content
  */
 export async function processAttachments(
-  attachments: Array<{ filename: string; content: string }>,
+  attachments: Array<{ filename: string; content: string | Buffer }>,
 ): Promise<string[]> {
   const xmlContents: string[] = [];
 

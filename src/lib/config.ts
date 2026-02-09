@@ -28,6 +28,9 @@ export const config = {
 export function validateWebhookConfig(): { valid: boolean; missing: string[] } {
   const missing: string[] = [];
 
+  if (!config.resendApiKey) {
+    missing.push('RESEND_API_KEY');
+  }
   if (!config.webhookSecret) {
     missing.push('RESEND_WEBHOOK_SECRET');
   }

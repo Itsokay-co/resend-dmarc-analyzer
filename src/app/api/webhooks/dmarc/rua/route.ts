@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { Resend } from 'resend';
 import {
   config,
   validateEmailConfig,
@@ -12,17 +13,22 @@ import {
 } from '@/lib/webhook/verify';
 import type { DMARCAnalysis } from '@/types/dmarc';
 
-interface ResendInboundEmail {
-  from: string;
-  to: string;
-  subject: string;
-  text?: string;
-  html?: string;
-  attachments?: Array<{
-    filename: string;
-    content: string;
-    content_type: string;
-  }>;
+interface ResendWebhookPayload {
+  type: string;
+  created_at: string;
+  data: {
+    email_id: string;
+    from: string;
+    to: string[];
+    subject: string;
+    attachments: Array<{
+      id: string;
+      filename: string;
+      content_type: string;
+      content_disposition: string;
+      content_id?: string;
+    }>;
+  };
 }
 
 export async function POST(request: NextRequest) {
@@ -61,16 +67,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Parse the email payload
-  let email: ResendInboundEmail;
+  // Parse the webhook payload
+  let webhook: ResendWebhookPayload;
   try {
-    email = JSON.parse(rawBody);
+    webhook = JSON.parse(rawBody);
   } catch {
     return NextResponse.json(
       { error: 'Invalid JSON payload' },
       { status: 400 },
     );
   }
+
+  if (webhook.type !== 'email.received') {
+    return NextResponse.json(
+      { error: 'Unexpected event type' },
+      { status: 400 },
+    );
+  }
+
+  const { data: email } = webhook;
 
   // Process attachments
   if (!email.attachments || email.attachments.length === 0) {
@@ -81,13 +96,38 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Fetch attachment content via Resend API
+    const resend = new Resend(config.resendApiKey);
+    const { data: attachmentList } =
+      await resend.emails.receiving.attachments.list({
+        emailId: email.email_id,
+      });
+
+    if (!attachmentList || attachmentList.data.length === 0) {
+      return NextResponse.json(
+        { error: 'No attachments found via API' },
+        { status: 400 },
+      );
+    }
+
+    // Download attachment content
+    const attachmentsWithContent: Array<{ filename: string; content: Buffer }> =
+      [];
+    for (const attachment of attachmentList.data) {
+      const response = await fetch(attachment.download_url);
+      if (!response.ok) {
+        console.error(`Failed to download ${attachment.filename}`);
+        continue;
+      }
+      const buffer = Buffer.from(await response.arrayBuffer());
+      attachmentsWithContent.push({
+        filename: attachment.filename ?? 'unknown',
+        content: buffer,
+      });
+    }
+
     // Extract XML from attachments
-    const xmlContents = await processAttachments(
-      email.attachments.map((att) => ({
-        filename: att.filename,
-        content: att.content,
-      })),
-    );
+    const xmlContents = await processAttachments(attachmentsWithContent);
 
     if (xmlContents.length === 0) {
       return NextResponse.json(
