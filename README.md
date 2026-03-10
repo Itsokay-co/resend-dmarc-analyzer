@@ -83,6 +83,11 @@ Configure these endpoints in your Resend dashboard:
 - **RUA (Aggregate Reports)**: `https://your-domain.com/api/webhooks/dmarc/rua`
 - **RUF (Forensic Reports)**: `https://your-domain.com/api/webhooks/dmarc/ruf`
 
+Copy the signing secret from the Resend dashboard and paste it into the `RESEND_WEBHOOK_SECRET` environment variable.
+
+> [!TIP]
+> Webhooks need publicly accessible HTTPS endpoints. To test the webhook in development, use ngrok or a similar service to create a tunnel to your local server. Once you have the public URL, update the webhook URLs to your production domain in the Resend dashboard.
+
 ## Scripts
 
 | Script | Description |

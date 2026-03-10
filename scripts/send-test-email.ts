@@ -219,10 +219,12 @@ const sampleAnalysis: DMARCAnalysis = {
 };
 
 async function main() {
-  const recipient = process.argv[2];
+  const recipient = process.argv[2] || process.env.DMARC_RECIPIENT_EMAIL;
 
   if (!recipient) {
-    console.error('Usage: pnpm test:email <recipient-email>');
+    console.error(
+      'Usage: pnpm test:email <recipient-email>\n       Or set DMARC_RECIPIENT_EMAIL in .env',
+    );
     process.exit(1);
   }
 
