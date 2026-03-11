@@ -35,8 +35,12 @@ const commitMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'DMARC Analyzer',
+  title: 'DMARC Analyzer by Resend',
   description: 'Analyze DMARC aggregate reports',
+  metadataBase: new URL('https://checkdmarc.email'),
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function RootLayout({
