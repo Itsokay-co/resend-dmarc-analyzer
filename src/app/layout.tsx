@@ -36,7 +36,8 @@ const commitMono = localFont({
 
 export const metadata: Metadata = {
   title: 'DMARC Analyzer by Resend',
-  description: 'Analyze DMARC aggregate reports',
+  description:
+    'Upload and analyze DMARC aggregate reports to monitor email authentication. See pass rates, SPF and DKIM results, and identify unauthorized senders for your domain.',
   metadataBase: new URL('https://checkdmarc.email'),
   alternates: {
     canonical: '/',
