@@ -31,6 +31,40 @@ interface ResendWebhookPayload {
   };
 }
 
+interface ResolvedAttachment {
+  id: string;
+  filename?: string;
+  download_url: string;
+}
+
+async function fetchAttachmentWithRetry(
+  resend: Resend,
+  emailId: string,
+  attachmentId: string,
+  attempts = 4,
+): Promise<ResolvedAttachment | null> {
+  let delayMs = 750;
+  for (let i = 0; i < attempts; i++) {
+    const { data, error } = await resend.emails.receiving.attachments.get({
+      emailId,
+      id: attachmentId,
+    });
+    if (data?.download_url) {
+      return data as ResolvedAttachment;
+    }
+    if (error) {
+      console.warn(
+        `attachments.get attempt ${i + 1}/${attempts} for ${attachmentId} errored: ${JSON.stringify(error)}`,
+      );
+    }
+    if (i < attempts - 1) {
+      await new Promise((r) => setTimeout(r, delayMs));
+      delayMs *= 2;
+    }
+  }
+  return null;
+}
+
 export async function POST(request: NextRequest) {
   // Validate config
   const configValidation = validateWebhookConfig();
@@ -96,34 +130,41 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    // Fetch attachment content via Resend API
+    // Use attachment IDs from the webhook payload directly. The list endpoint
+    // races with CDN indexing at fire-time and returns empty even when the
+    // payload already includes attachment IDs.
     const resend = new Resend(config.resendApiKey);
-    const { data: attachmentList } =
-      await resend.emails.receiving.attachments.list({
-        emailId: email.email_id,
-      });
-
-    if (!attachmentList || attachmentList.data.length === 0) {
-      return NextResponse.json(
-        { error: 'No attachments found via API' },
-        { status: 400 },
-      );
-    }
-
-    // Download attachment content
     const attachmentsWithContent: Array<{ filename: string; content: Buffer }> =
       [];
-    for (const attachment of attachmentList.data) {
-      const response = await fetch(attachment.download_url);
+    for (const meta of email.attachments) {
+      const fetched = await fetchAttachmentWithRetry(
+        resend,
+        email.email_id,
+        meta.id,
+      );
+      if (!fetched) {
+        console.error(
+          `Failed to resolve attachment ${meta.id} (${meta.filename})`,
+        );
+        continue;
+      }
+      const response = await fetch(fetched.download_url);
       if (!response.ok) {
-        console.error(`Failed to download ${attachment.filename}`);
+        console.error(`Failed to download ${meta.filename}: ${response.status}`);
         continue;
       }
       const buffer = Buffer.from(await response.arrayBuffer());
       attachmentsWithContent.push({
-        filename: attachment.filename ?? 'unknown',
+        filename: fetched.filename ?? meta.filename ?? 'unknown',
         content: buffer,
       });
+    }
+
+    if (attachmentsWithContent.length === 0) {
+      return NextResponse.json(
+        { error: 'No attachments could be downloaded' },
+        { status: 502 },
+      );
     }
 
     // Extract XML from attachments
