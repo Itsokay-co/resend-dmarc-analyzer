@@ -45,11 +45,11 @@ function renderHtml(r: Rollup, fetchedAt: string, periodLabel: string): string {
 
   const failRows =
     r.topFailures.length === 0
-      ? '<tr><td colspan="4" style="color:#0a0">No DKIM+SPF dual-failures in this window.</td></tr>'
+      ? '<tr><td colspan="7" style="color:#0a0">No DKIM+SPF dual-failures in this window.</td></tr>'
       : r.topFailures
           .map(
             (f) =>
-              `<tr><td><code>${esc(f.sourceIp)}</code></td><td>${esc(f.org)}</td><td>${f.count.toLocaleString()}</td><td>dkim=${esc(f.dkim)} spf=${esc(f.spf)}</td></tr>`,
+              `<tr><td><code>${esc(f.sourceIp)}</code></td><td>${esc(f.org)}</td><td>${f.count.toLocaleString()}</td><td>${esc(f.headerFrom)}</td><td>${esc(f.envelopeFrom)}</td><td>${esc(f.dkimDomains)}</td><td>dkim=${esc(f.dkim)} spf=${esc(f.spf)}</td></tr>`,
           )
           .join('');
 
@@ -85,7 +85,7 @@ function renderHtml(r: Rollup, fetchedAt: string, periodLabel: string): string {
 
 <h2 style="margin:24px 0 8px;font-size:16px">Dual-failures (DKIM + SPF both failed)</h2>
 <table style="width:100%;border-collapse:collapse;font-size:14px">
-  <thead><tr style="background:#eee"><th style="text-align:left;padding:6px 8px">IP</th><th style="text-align:left;padding:6px 8px">Reporter</th><th style="text-align:right;padding:6px 8px">Count</th><th style="text-align:left;padding:6px 8px">Verdict</th></tr></thead>
+  <thead><tr style="background:#eee"><th style="text-align:left;padding:6px 8px">IP</th><th style="text-align:left;padding:6px 8px">Reporter</th><th style="text-align:right;padding:6px 8px">Count</th><th style="text-align:left;padding:6px 8px">Header from</th><th style="text-align:left;padding:6px 8px">Envelope from</th><th style="text-align:left;padding:6px 8px">DKIM domain</th><th style="text-align:left;padding:6px 8px">Verdict</th></tr></thead>
   <tbody>${failRows}</tbody>
 </table>
 

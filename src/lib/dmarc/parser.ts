@@ -95,6 +95,9 @@ function parseRecord(record: unknown): DMARCRecord {
       envelope_to: identifiers.envelope_to
         ? String(identifiers.envelope_to)
         : undefined,
+      envelope_from: identifiers.envelope_from
+        ? String(identifiers.envelope_from)
+        : undefined,
       header_from: String(identifiers.header_from),
     },
     auth_results: {
