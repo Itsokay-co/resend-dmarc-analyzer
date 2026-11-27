@@ -91,6 +91,7 @@ export interface Row {
 // Identifier information
 export interface Identifiers {
   envelope_to?: string;
+  envelope_from?: string;
   header_from: string;
 }
 

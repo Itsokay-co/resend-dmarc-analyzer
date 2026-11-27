@@ -1,4 +1,4 @@
-import type { DMARCAnalysis } from '@/types/dmarc';
+import type { DMARCAnalysis, DMARCRecord } from '@/types/dmarc';
 
 export type Rollup = {
   reportCount: number;
@@ -24,8 +24,29 @@ export type Rollup = {
     count: number;
     dkim: string;
     spf: string;
+    headerFrom: string;
+    envelopeFrom: string;
+    dkimDomains: string;
   }>;
 };
+
+// Reporters that omit envelope_from still name the domain SPF checked,
+// which is the MAIL FROM domain (or HELO when the envelope was empty).
+function envelopeFromOf(rec: DMARCRecord): string {
+  if (rec.identifiers.envelope_from) {
+    return rec.identifiers.envelope_from;
+  }
+  const spfDomains = rec.auth_results.spf.map((s) => s.domain).filter(Boolean);
+  return spfDomains.length ? spfDomains.join(', ') : 'none';
+}
+
+function dkimDomainsOf(rec: DMARCRecord): string {
+  const sigs = rec.auth_results.dkim ?? [];
+  if (sigs.length === 0) {
+    return 'none';
+  }
+  return sigs.map((d) => `${d.domain} (${d.result})`).join(', ');
+}
 
 export function aggregate(
   analyses: DMARCAnalysis[],
@@ -93,6 +114,9 @@ export function aggregate(
           count,
           dkim: pe.dkim,
           spf: pe.spf,
+          headerFrom: rec.identifiers.header_from,
+          envelopeFrom: envelopeFromOf(rec),
+          dkimDomains: dkimDomainsOf(rec),
         });
       }
 
